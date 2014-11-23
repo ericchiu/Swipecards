@@ -2,6 +2,9 @@ package com.lorentzos.flingswipe;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +48,8 @@ public class FlingCardListener implements View.OnTouchListener {
     private final Object obj = new Object();
     private boolean isAnimationRunning = false;
     private float MAX_COS = (float) Math.cos(Math.toRadians(45));
+    private int mWidth;
+    private boolean enable;
 
 
     public FlingCardListener(View frame, Object itemAtPosition, FlingListener flingListener) {
@@ -63,12 +68,18 @@ public class FlingCardListener implements View.OnTouchListener {
         this.parentWidth = ((ViewGroup) frame.getParent()).getWidth();
         this.BASE_ROTATION_DEGREES = rotation_degrees;
         this.mFlingListener = flingListener;
-        
+        Display display = ((Activity)frame.getContext()).getWindowManager().getDefaultDisplay();
+        Point point = new Point();
+        display.getSize(point);
+        mWidth = point.x;
+
     }
 
 
     public boolean onTouch(View view, MotionEvent event) {
-
+        if(!enable){
+            return false;
+        }
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
 
@@ -144,8 +155,9 @@ public class FlingCardListener implements View.OnTouchListener {
 
                 //in this area would be code for doing something with the view as the frame moves.
                 frame.setX(aPosX);
-                frame.setY(aPosY);
+//                frame.setY(aPosY);
                 frame.setRotation(rotation);
+                mFlingListener.onUpdate((int) aPosX);
                 break;
 
             case MotionEvent.ACTION_CANCEL: {
@@ -179,6 +191,7 @@ public class FlingCardListener implements View.OnTouchListener {
             if(abslMoveDistance<4.0){
                 mFlingListener.onClick(dataObject);
             }
+            mFlingListener.onCancel();
         }
         return false;
     }
@@ -294,8 +307,13 @@ public class FlingCardListener implements View.OnTouchListener {
         public void leftExit(Object dataObject);
         public void rightExit(Object dataObject);
         public void onClick(Object dataObject);
+        public void onUpdate(int left);
+        public void onCancel();
     }
 
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 }
 
 
