@@ -2,9 +2,6 @@ package com.lorentzos.flingswipe;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
-import android.graphics.Point;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +45,6 @@ public class FlingCardListener implements View.OnTouchListener {
     private final Object obj = new Object();
     private boolean isAnimationRunning = false;
     private float MAX_COS = (float) Math.cos(Math.toRadians(45));
-    private int mWidth;
     private boolean enable;
 
 
@@ -68,11 +64,6 @@ public class FlingCardListener implements View.OnTouchListener {
         this.parentWidth = ((ViewGroup) frame.getParent()).getWidth();
         this.BASE_ROTATION_DEGREES = rotation_degrees;
         this.mFlingListener = flingListener;
-        Display display = ((Activity)frame.getContext()).getWindowManager().getDefaultDisplay();
-        Point point = new Point();
-        display.getSize(point);
-        mWidth = point.x;
-
     }
 
 
@@ -314,6 +305,7 @@ public class FlingCardListener implements View.OnTouchListener {
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
+
 }
 
 
