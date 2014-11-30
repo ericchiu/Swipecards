@@ -283,10 +283,9 @@ public class SwipeFlingView extends FrameLayout {
         this.mLayoutRessource = layoutressource;
     }
 
-    public void reset(){
-        if(mActiveCard != null){
-            mActiveCard.setY(0);
-            mActiveCard.setX(0);
+    public void reset() {
+        if (flingCardListener != null) {
+            flingCardListener.reset();
         }
     }
 }
